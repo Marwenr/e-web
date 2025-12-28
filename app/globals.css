@@ -1,26 +1,207 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  /* CSS Reset / Normalize */
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    line-height: inherit;
+    background-color: theme('colors.background.DEFAULT');
+    color: theme('colors.foreground.DEFAULT');
+    font-family: theme('fontFamily.sans');
+  }
+
+  /* Base Typography Styles */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: theme('fontWeight.bold');
+    line-height: theme('lineHeight.tight');
+    color: theme('colors.foreground.DEFAULT');
+  }
+
+  h1 {
+    font-size: theme('fontSize.h1[0]');
+    line-height: theme('fontSize.h1[1].lineHeight');
+    letter-spacing: theme('fontSize.h1[1].letterSpacing');
+  }
+
+  h2 {
+    font-size: theme('fontSize.h2[0]');
+    line-height: theme('fontSize.h2[1].lineHeight');
+    letter-spacing: theme('fontSize.h2[1].letterSpacing');
+  }
+
+  h3 {
+    font-size: theme('fontSize.h3[0]');
+    line-height: theme('fontSize.h3[1].lineHeight');
+    letter-spacing: theme('fontSize.h3[1].letterSpacing');
+  }
+
+  h4 {
+    font-size: theme('fontSize.h4[0]');
+    line-height: theme('fontSize.h4[1].lineHeight');
+    letter-spacing: theme('fontSize.h4[1].letterSpacing');
+  }
+
+  h5 {
+    font-size: theme('fontSize.h5[0]');
+    line-height: theme('fontSize.h5[1].lineHeight');
+    letter-spacing: theme('fontSize.h5[1].letterSpacing');
+  }
+
+  h6 {
+    font-size: theme('fontSize.h6[0]');
+    line-height: theme('fontSize.h6[1].lineHeight');
+    letter-spacing: theme('fontSize.h6[1].letterSpacing');
+  }
+
+  p {
+    font-size: theme('fontSize.body[0]');
+    line-height: theme('fontSize.body[1].lineHeight');
+    color: theme('colors.foreground.DEFAULT');
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+    transition: color 0.2s ease-in-out;
+  }
+
+  a:hover {
+    color: theme('colors.primary.600');
+  }
+
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    margin: 0;
+  }
+
+  /* Dark mode ready (not activated yet) */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+    }
+  }
+
+  /* Accessibility: Focus styles */
+  :focus-visible {
+    outline: 2px solid theme('colors.primary.500');
+    outline-offset: 2px;
+  }
+
+  /* Accessibility: Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Container utilities */
+  .container-custom {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: theme('spacing.4');
+    padding-right: theme('spacing.4');
+  }
+
+  @screen sm {
+    .container-custom {
+      max-width: theme('screens.sm');
+      padding-left: theme('spacing.6');
+      padding-right: theme('spacing.6');
+    }
+  }
+
+  @screen md {
+    .container-custom {
+      max-width: theme('screens.md');
+      padding-left: theme('spacing.8');
+      padding-right: theme('spacing.8');
+    }
+  }
+
+  @screen lg {
+    .container-custom {
+      max-width: theme('screens.lg');
+      padding-left: theme('spacing.8');
+      padding-right: theme('spacing.8');
+    }
+  }
+
+  @screen xl {
+    .container-custom {
+      max-width: theme('screens.xl');
+      padding-left: theme('spacing.8');
+      padding-right: theme('spacing.8');
+    }
+  }
+
+  @screen 2xl {
+    .container-custom {
+      max-width: theme('screens.2xl');
+      padding-left: theme('spacing.8');
+      padding-right: theme('spacing.8');
+    }
+  }
 }
