@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Container, Section, Button } from "@/components/ui";
+import { Container, Section } from "@/components/ui";
 import { getProductBySlug, getFeaturedProducts } from "@/lib/api/product";
-import { ProductCard } from "@/components/product";
+import { ProductCard, ProductAddToCart } from "@/components/product";
 import { ProductDetailSkeleton } from "@/components/skeleton";
 
 interface ProductPageProps {
@@ -413,11 +413,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   </div>
                 )}
 
-                <div className="pt-4 border-t border-neutral-200">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Add to Cart
-                  </Button>
-                </div>
+                <ProductAddToCart
+                  productId={product.id}
+                />
 
                 {/* Product Features */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-neutral-200">

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import { useAuthStore } from '@/store/auth';
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { useAuthStore, useCartStore } from "@/store";
 
 export default function ConditionalLayout({
   children,
@@ -12,21 +12,22 @@ export default function ConditionalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAuthPage = pathname?.startsWith('/auth');
-  const isAdminPage = pathname?.startsWith('/admin');
-  const { initialize } = useAuthStore();
+  const isAuthPage = pathname?.startsWith("/auth");
+  const isAdminPage = pathname?.startsWith("/admin");
+  const { initialize: initializeAuth } = useAuthStore();
+  const { initialize: initializeCart } = useCartStore();
 
-  // Initialize auth store on app load
+  // Initialize stores on app load
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    initializeAuth();
+    initializeCart();
+  }, [initializeAuth, initializeCart]);
 
   return (
     <>
       {!isAuthPage && !isAdminPage && <Navbar />}
-      {children}
+      <div className="min-h-screen">{children}</div>
       {!isAuthPage && !isAdminPage && <Footer />}
     </>
   );
 }
-

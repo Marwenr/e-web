@@ -9,6 +9,11 @@ export { ProductSectionError } from './ProductSectionError';
 
 // Types from ProductCard (legacy - for backwards compatibility)
 export type { ProductCardProps } from './ProductCard';
+
+export { default as VariantSelector } from './VariantSelector';
+export type { VariantSelectorProps } from './VariantSelector';
+
+export { default as ProductAddToCart } from './ProductAddToCart';
 export type { ProductGridProps } from './ProductGrid';
 export type { ProductSectionProps } from './ProductSection';
 

@@ -1,16 +1,22 @@
 'use client';
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { SearchIcon, ShoppingBagIcon, UserIcon } from "./svg";
-import { useAuthStore } from "@/store/auth";
+import { Badge } from "./ui";
+import { MiniCart } from "./cart";
+import { useAuthStore, useCartStore } from "@/store";
 
-export interface NavbarProps {
-  cartCount?: number;
-}
-
-const Navbar: React.FC<NavbarProps> = ({ cartCount = 0 }) => {
+const Navbar: React.FC = () => {
   const { isAuthenticated } = useAuthStore();
+  const { cart, initialize } = useCartStore();
+  const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
+  const cartCount = cart?.itemCount || 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-background">
@@ -55,16 +61,22 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount = 0 }) => {
           </button>
           <button
             type="button"
+            onClick={() => setIsMiniCartOpen(true)}
             aria-label="Shopping cart"
             className="relative text-foreground transition-colors hover:text-foreground-secondary"
           >
             <ShoppingBagIcon />
             {cartCount > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-900 text-label font-medium text-white">
-                {cartCount > 9 ? "9+" : cartCount}
-              </span>
+              <Badge
+                variant="primary"
+                size="sm"
+                className="absolute -right-2 -top-2"
+              >
+                {cartCount > 99 ? "99+" : cartCount}
+              </Badge>
             )}
           </button>
+          <MiniCart isOpen={isMiniCartOpen} onClose={() => setIsMiniCartOpen(false)} />
           {!isAuthenticated ? (
             <>
               {/* Login Button - Desktop */}

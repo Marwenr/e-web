@@ -516,3 +516,55 @@ export async function getDiscountedProducts(
     );
   }
 }
+
+export interface ProductVariant {
+  id: string;
+  productId: string;
+  sku: string;
+  name?: string;
+  basePrice: number;
+  discountPrice?: number;
+  stock: number;
+  attributes: Array<{
+    name: string;
+    value: string;
+  }>;
+  images?: string[];
+  isDefault: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/**
+ * Get product variants by product ID
+ */
+export async function getProductVariants(productId: string): Promise<ProductVariant[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products/${productId}/variants`, {
+      method: "GET",
+      headers: getAuthHeaders(),
+      credentials: "include",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new ApiError(
+        data.error?.message || "Failed to fetch product variants",
+        data.error?.code || "GET_VARIANTS_ERROR",
+        response.status
+      );
+    }
+
+    return data.data || [];
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    throw new ApiError(
+      "Failed to fetch product variants",
+      "GET_VARIANTS_ERROR",
+      500
+    );
+  }
+}

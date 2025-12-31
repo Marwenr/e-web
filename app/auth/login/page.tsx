@@ -10,7 +10,8 @@ import { Button, Input, PasswordInput, Label } from "@/components/ui";
 import { AuthLayout } from "@/components/auth";
 import { Alert, FieldError } from "@/components/patterns";
 import { login } from "@/lib/api/auth";
-import { useAuthStore } from "@/store/auth";
+import { useAuthStore, useCartStore } from "@/store";
+import { getOrCreateSessionId } from "@/lib/api/cart";
 import { ButtonLoading } from "@/components/patterns";
 
 const loginSchema = z.object({
@@ -28,6 +29,7 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setAuthData, setLoading, isLoading } = useAuthStore();
+  const { mergeCart, fetchCart } = useCartStore();
 
   const {
     register,
@@ -52,6 +54,20 @@ function LoginForm() {
 
       // Update auth store
       setAuthData(result);
+
+      // Merge guest cart into user cart if session exists
+      try {
+        const sessionId = getOrCreateSessionId();
+        if (sessionId) {
+          await mergeCart(sessionId);
+        } else {
+          // If no session, just fetch the user cart
+          await fetchCart();
+        }
+      } catch (error) {
+        // Silently fail cart merge - don't block login
+        console.error("Failed to merge cart:", error);
+      }
 
       // Redirect to the original page or default to user settings
       const redirectUrl = searchParams.get("redirect") || "/user/settings";
