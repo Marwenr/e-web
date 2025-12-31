@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +16,7 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ALKORSI - E-commerce",
+  title: "MeubleTN - E-commerce",
   description: "Discover timeless pieces for effortless style.",
 };
 
@@ -31,9 +30,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfairDisplay.variable} antialiased`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
       </body>
     </html>
   );

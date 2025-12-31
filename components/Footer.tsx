@@ -1,12 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Container } from "./ui";
-import {
-  InstagramIcon,
-  FacebookIcon,
-  TwitterIcon,
-  YouTubeIcon,
-} from "./svg";
+import { InstagramIcon, FacebookIcon, TwitterIcon, YouTubeIcon } from "./svg";
 
 const Footer: React.FC = () => {
   return (
@@ -17,7 +12,7 @@ const Footer: React.FC = () => {
             {/* Brand Info */}
             <div className="flex flex-col space-y-4">
               <Link href="/" className="text-h3 font-bold text-white">
-                ALKORSI
+                MeubleTN
               </Link>
               <p className="text-body-sm text-neutral-300">
                 Discover timeless pieces for effortless style.
@@ -118,22 +113,22 @@ const Footer: React.FC = () => {
             <div className="flex flex-col space-y-4">
               <h3 className="text-body-lg font-semibold text-white">Contact</h3>
               <div className="flex flex-col space-y-3 text-body-sm text-neutral-300">
-                <p>123 Fashion Street</p>
-                <p>New York, NY 10001</p>
-                <p>
+                <p className="text-neutral-300 ">123 Fashion Street</p>
+                <p className="text-neutral-300 ">New York, NY 10001</p>
+                <p className="text-neutral-300 ">
                   <a
                     href="tel:+1234567890"
-                    className="transition-colors hover:text-white"
+                    className="transition-colors text-neutral-300 hover:text-white"
                   >
                     +1 (234) 567-890
                   </a>
                 </p>
                 <p>
                   <a
-                    href="mailto:info@alkorsi.com"
-                    className="transition-colors hover:text-white"
+                    href="mailto:info@meubletn.com"
+                    className="transition-colors text-neutral-300 hover:text-white"
                   >
-                    info@alkorsi.com
+                    info@meubletn.com
                   </a>
                 </p>
               </div>
@@ -143,7 +138,7 @@ const Footer: React.FC = () => {
           {/* Copyright */}
           <div className="mt-12 border-t border-neutral-700 pt-8">
             <p className="text-body-sm text-neutral-400">
-              Copyright © 2024, Alkorsi
+              Copyright © 2024, MeubleTN
             </p>
           </div>
         </div>
