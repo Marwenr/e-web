@@ -103,6 +103,21 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem("user");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+
+      // Clear all cookies
+      const cookies = document.cookie.split(";");
+      cookies.forEach((cookie) => {
+        const eqPos = cookie.indexOf("=");
+        const name =
+          eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+
+        // Clear cookie for current path
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+
+        // Also try to clear for parent paths
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
+        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.${window.location.hostname}`;
+      });
     }
     set({ user: null, isAuthenticated: false });
   },

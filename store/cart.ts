@@ -36,9 +36,9 @@ export const useCartStore = create<CartState>((set, get) => ({
   initialize: async () => {
     if (typeof window === "undefined") return;
 
-    // Check if user is authenticated
-    const { useAuthStore } = await import("@/store/auth");
-    const isAuthenticated = useAuthStore.getState().isAuthenticated;
+    // Check if user is authenticated (synchronous check)
+    const token = localStorage.getItem("accessToken");
+    const isAuthenticated = !!token;
 
     if (isAuthenticated) {
       // For authenticated users, fetch cart without sessionId
@@ -63,13 +63,24 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // Check if user is authenticated
-      const { useAuthStore } = await import("@/store/auth");
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      // Check if user is authenticated (synchronous check)
+      let isAuthenticated = false;
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken");
+        isAuthenticated = !!token;
+      }
 
       // For authenticated users, don't pass sessionId (backend uses userId from token)
-      // For guests, use sessionId
-      const sessionId = isAuthenticated ? undefined : (state.sessionId || getOrCreateSessionId());
+      // For guests, always ensure we have a sessionId
+      let sessionId: string | undefined = undefined;
+      if (!isAuthenticated) {
+        sessionId = state.sessionId || getOrCreateSessionId();
+        // Update state with sessionId if it wasn't set
+        if (!state.sessionId) {
+          set({ sessionId });
+        }
+      }
+
       const cart = await cartApi.getCart(sessionId);
 
       set({ cart, isLoading: false, error: null, sessionId: sessionId || null });
@@ -86,13 +97,24 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // Check if user is authenticated
-      const { useAuthStore } = await import("@/store/auth");
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      // Check if user is authenticated (synchronous check)
+      let isAuthenticated = false;
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken");
+        isAuthenticated = !!token;
+      }
 
       // For authenticated users, don't pass sessionId (backend uses userId from token)
-      // For guests, use sessionId
-      const sessionId = isAuthenticated ? undefined : (state.sessionId || getOrCreateSessionId());
+      // For guests, always ensure we have a sessionId
+      let sessionId: string | undefined = undefined;
+      if (!isAuthenticated) {
+        sessionId = state.sessionId || getOrCreateSessionId();
+        // Update state with sessionId if it wasn't set
+        if (!state.sessionId) {
+          set({ sessionId });
+        }
+      }
+
       const cart = await cartApi.addToCart(
         { productId, variantId, quantity },
         sessionId
@@ -113,13 +135,23 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // Check if user is authenticated
-      const { useAuthStore } = await import("@/store/auth");
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      // Check if user is authenticated (synchronous check)
+      let isAuthenticated = false;
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken");
+        isAuthenticated = !!token;
+      }
 
       // For authenticated users, don't pass sessionId (backend uses userId from token)
-      // For guests, use sessionId
-      const sessionId = isAuthenticated ? undefined : (state.sessionId || getOrCreateSessionId());
+      // For guests, always ensure we have a sessionId
+      let sessionId: string | undefined = undefined;
+      if (!isAuthenticated) {
+        sessionId = state.sessionId || getOrCreateSessionId();
+        if (!state.sessionId) {
+          set({ sessionId });
+        }
+      }
+
       const cart = await cartApi.updateCartItem(
         { itemIndex, quantity },
         sessionId
@@ -140,13 +172,23 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // Check if user is authenticated
-      const { useAuthStore } = await import("@/store/auth");
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      // Check if user is authenticated (synchronous check)
+      let isAuthenticated = false;
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken");
+        isAuthenticated = !!token;
+      }
 
       // For authenticated users, don't pass sessionId (backend uses userId from token)
-      // For guests, use sessionId
-      const sessionId = isAuthenticated ? undefined : (state.sessionId || getOrCreateSessionId());
+      // For guests, always ensure we have a sessionId
+      let sessionId: string | undefined = undefined;
+      if (!isAuthenticated) {
+        sessionId = state.sessionId || getOrCreateSessionId();
+        if (!state.sessionId) {
+          set({ sessionId });
+        }
+      }
+
       const cart = await cartApi.removeCartItem(
         { itemIndex },
         sessionId
@@ -167,13 +209,23 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // Check if user is authenticated
-      const { useAuthStore } = await import("@/store/auth");
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      // Check if user is authenticated (synchronous check)
+      let isAuthenticated = false;
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken");
+        isAuthenticated = !!token;
+      }
 
       // For authenticated users, don't pass sessionId (backend uses userId from token)
-      // For guests, use sessionId
-      const sessionId = isAuthenticated ? undefined : (state.sessionId || getOrCreateSessionId());
+      // For guests, always ensure we have a sessionId
+      let sessionId: string | undefined = undefined;
+      if (!isAuthenticated) {
+        sessionId = state.sessionId || getOrCreateSessionId();
+        if (!state.sessionId) {
+          set({ sessionId });
+        }
+      }
+
       await cartApi.clearCart(sessionId);
 
       set({ cart: null, isLoading: false, error: null });
@@ -207,13 +259,23 @@ export const useCartStore = create<CartState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // Check if user is authenticated
-      const { useAuthStore } = await import("@/store/auth");
-      const isAuthenticated = useAuthStore.getState().isAuthenticated;
+      // Check if user is authenticated (synchronous check)
+      let isAuthenticated = false;
+      if (typeof window !== "undefined") {
+        const token = localStorage.getItem("accessToken");
+        isAuthenticated = !!token;
+      }
 
       // For authenticated users, don't pass sessionId (backend uses userId from token)
-      // For guests, use sessionId
-      const sessionId = isAuthenticated ? undefined : (state.sessionId || getOrCreateSessionId());
+      // For guests, always ensure we have a sessionId
+      let sessionId: string | undefined = undefined;
+      if (!isAuthenticated) {
+        sessionId = state.sessionId || getOrCreateSessionId();
+        if (!state.sessionId) {
+          set({ sessionId });
+        }
+      }
+
       const cart = await cartApi.recalculateCart(sessionId);
 
       set({ cart, isLoading: false, error: null });

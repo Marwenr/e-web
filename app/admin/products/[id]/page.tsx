@@ -16,7 +16,12 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui";
-import { Alert, FieldError, ButtonLoading, LoadingSpinner } from "@/components/patterns";
+import {
+  Alert,
+  FieldError,
+  ButtonLoading,
+  LoadingSpinner,
+} from "@/components/patterns";
 import {
   getAdminProductById,
   updateAdminProduct,
@@ -48,11 +53,7 @@ const productSchema = z
       .max(500, "Short description cannot exceed 500 characters")
       .optional(),
     categoryId: z.string().min(1, "Category is required"),
-    sku: z
-      .string()
-      .min(1, "SKU is required")
-      .trim()
-      .toUpperCase(),
+    sku: z.string().min(1, "SKU is required").trim().toUpperCase(),
     basePrice: z
       .number()
       .min(0, "Base price must be at least 0")
@@ -62,6 +63,7 @@ const productSchema = z
       .min(0, "Discount price must be at least 0")
       .optional()
       .nullable(),
+    stock: z.number().min(0, "Stock must be at least 0").optional(),
     status: z.enum(["draft", "active", "archived"]).optional(),
     seoTitle: z
       .string()
@@ -120,6 +122,7 @@ export default function AdminProductEditPage() {
       sku: "",
       basePrice: 0,
       discountPrice: undefined,
+      stock: undefined,
       status: "draft",
       seoTitle: "",
       seoDescription: "",
@@ -158,6 +161,7 @@ export default function AdminProductEditPage() {
         sku: product.sku || "",
         basePrice: product.basePrice || 0,
         discountPrice: product.discountPrice || undefined,
+        stock: product.stock !== undefined ? product.stock : undefined,
         status: product.status || "draft",
         seoTitle: product.seoTitle || "",
         seoDescription: product.seoDescription || "",
@@ -233,6 +237,7 @@ export default function AdminProductEditPage() {
         sku: data.sku.trim().toUpperCase(),
         basePrice: data.basePrice,
         discountPrice: data.discountPrice || undefined,
+        stock: data.stock || undefined,
         status: data.status || "draft",
         images: images.length > 0 ? images : [],
         seoTitle: data.seoTitle?.trim() || undefined,
@@ -462,6 +467,31 @@ export default function AdminProductEditPage() {
                   />
                 )}
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="stock">Stock</Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  step="1"
+                  min="0"
+                  placeholder="0"
+                  disabled={isSubmitting}
+                  error={!!errors.stock}
+                  {...register("stock", {
+                    valueAsNumber: true,
+                    setValueAs: (v) => (v === "" ? undefined : Number(v)),
+                  })}
+                />
+                {errors.stock && (
+                  <FieldError
+                    message={errors.stock.message || "Invalid stock value"}
+                  />
+                )}
+                <p className="text-body-sm text-foreground-secondary">
+                  Stock disponible (for products without variants)
+                </p>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -471,7 +501,12 @@ export default function AdminProductEditPage() {
                 disabled={isSubmitting}
                 error={!!errors.status}
                 value={watch("status") || "draft"}
-                onChange={(e) => setValue("status", e.target.value as "draft" | "active" | "archived")}
+                onChange={(e) =>
+                  setValue(
+                    "status",
+                    e.target.value as "draft" | "active" | "archived"
+                  )
+                }
               >
                 <option value="draft">Draft</option>
                 <option value="active">Active</option>
@@ -501,7 +536,9 @@ export default function AdminProductEditPage() {
                   value={newImageUrl}
                   onChange={(e) => setNewImageUrl(e.target.value)}
                   disabled={isSubmitting}
-                  onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddImage())}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" && (e.preventDefault(), handleAddImage())
+                  }
                 />
                 <Input
                   type="text"
@@ -509,7 +546,9 @@ export default function AdminProductEditPage() {
                   value={newImageAlt}
                   onChange={(e) => setNewImageAlt(e.target.value)}
                   disabled={isSubmitting}
-                  onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), handleAddImage())}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" && (e.preventDefault(), handleAddImage())
+                  }
                 />
                 <Button
                   type="button"

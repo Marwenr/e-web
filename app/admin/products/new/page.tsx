@@ -59,6 +59,10 @@ const productSchema = z
       .min(0, "Discount price must be at least 0")
       .optional()
       .nullable(),
+    stock: z
+      .number()
+      .min(0, "Stock must be at least 0")
+      .optional(),
     status: z.enum(["draft", "active", "archived"]).optional(),
     seoTitle: z
       .string()
@@ -112,6 +116,7 @@ export default function AdminProductNewPage() {
       sku: "",
       basePrice: 0,
       discountPrice: undefined,
+      stock: undefined,
       status: "draft",
       seoTitle: "",
       seoDescription: "",
@@ -201,6 +206,7 @@ export default function AdminProductNewPage() {
         sku: data.sku.trim().toUpperCase(),
         basePrice: data.basePrice,
         discountPrice: data.discountPrice || undefined,
+        stock: data.stock || undefined,
         status: data.status || "draft",
         images: images.length > 0 ? images : [],
         attributes: [],
@@ -430,6 +436,33 @@ export default function AdminProductNewPage() {
                     }
                   />
                 )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="stock">Stock</Label>
+                <Input
+                  id="stock"
+                  type="number"
+                  step="1"
+                  min="0"
+                  placeholder="0"
+                  disabled={isSubmitting}
+                  error={!!errors.stock}
+                  {...register("stock", {
+                    valueAsNumber: true,
+                    setValueAs: (v) => (v === "" ? undefined : Number(v)),
+                  })}
+                />
+                {errors.stock && (
+                  <FieldError
+                    message={
+                      errors.stock.message || "Invalid stock value"
+                    }
+                  />
+                )}
+                <p className="text-body-sm text-foreground-secondary">
+                  Stock disponible (for products without variants)
+                </p>
               </div>
             </div>
 

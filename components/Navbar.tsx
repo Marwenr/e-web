@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import { MiniCart } from "./cart";
 import { useAuthStore, useCartStore } from "@/store";
 
 const Navbar: React.FC = () => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const { cart, initialize } = useCartStore();
   const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
 
@@ -17,6 +17,11 @@ const Navbar: React.FC = () => {
   }, [initialize]);
 
   const cartCount = cart?.itemCount || 0;
+
+  // Check if user is admin
+  const adminRoles = ["admin", "staff", "super_admin"];
+  const isAdmin =
+    isAuthenticated && user && adminRoles.includes(user.role?.toLowerCase());
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-background">
@@ -52,6 +57,25 @@ const Navbar: React.FC = () => {
 
         {/* Right Icons & Actions */}
         <div className="flex flex-1 items-center justify-end gap-4 sm:gap-6">
+          {isAdmin && (
+            <>
+              {/* Dashboard Button - Desktop */}
+              <Link
+                href="/admin"
+                className="hidden sm:inline-flex items-center gap-2 h-8 px-3 text-label font-medium bg-primary-900 text-white hover:bg-primary-800 active:bg-primary-950 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+              >
+                Dashboard
+              </Link>
+              {/* Dashboard Link - Mobile */}
+              <Link
+                href="/admin"
+                aria-label="Dashboard"
+                className="sm:hidden text-body-md font-medium text-primary-900 transition-colors hover:text-primary-800"
+              >
+                Dashboard
+              </Link>
+            </>
+          )}
           <button
             type="button"
             aria-label="Search"
@@ -76,7 +100,10 @@ const Navbar: React.FC = () => {
               </Badge>
             )}
           </button>
-          <MiniCart isOpen={isMiniCartOpen} onClose={() => setIsMiniCartOpen(false)} />
+          <MiniCart
+            isOpen={isMiniCartOpen}
+            onClose={() => setIsMiniCartOpen(false)}
+          />
           {!isAuthenticated ? (
             <>
               {/* Login Button - Desktop */}

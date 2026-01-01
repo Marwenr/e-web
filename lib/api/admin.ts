@@ -16,6 +16,7 @@ export interface AdminProduct {
   sku: string;
   basePrice: number;
   discountPrice?: number;
+  stock?: number;
   status: "draft" | "active" | "archived";
   soldCount: number;
   publishedAt?: string;
@@ -54,6 +55,7 @@ export interface CreateProductInput {
   sku: string;
   basePrice: number;
   discountPrice?: number;
+  stock?: number;
   status?: "draft" | "active" | "archived";
   images?: Array<{
     url: string;
