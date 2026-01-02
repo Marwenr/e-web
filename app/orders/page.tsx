@@ -1,20 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
   Button,
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  Container,
+  Section,
   Badge,
 } from "@/components/ui";
 import { getUserOrders, type Order, OrderStatus } from "@/lib/api/order";
-import { LoadingSpinner, EmptyState, Alert } from "@/components/patterns";
+import { LoadingState, EmptyState, Alert } from "@/components/patterns";
 import { ShoppingBagIcon } from "@/components/svg";
+import { useAuthStore } from "@/store/auth";
 
 const getStatusBadgeVariant = (status: OrderStatus) => {
   switch (status) {
@@ -59,14 +60,20 @@ const getStatusLabel = (status: OrderStatus) => {
   }
 };
 
-export default function UserOrdersPage() {
+export default function OrdersPage() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/auth/login");
+      return;
+    }
     loadOrders();
-  }, []);
+  }, [isAuthenticated]);
 
   const loadOrders = async () => {
     try {
@@ -84,54 +91,60 @@ export default function UserOrdersPage() {
     }
   };
 
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  if (isLoading) {
+    return (
+      <Section className="py-12">
+        <Container>
+          <LoadingState message="Loading your orders..." />
+        </Container>
+      </Section>
+    );
+  }
+
   return (
-    <div className="space-y-6">
-      <Card variant="elevated">
-        <CardHeader>
-          <CardTitle>Order History</CardTitle>
-          <CardDescription>
-            Your recent orders will appear here
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {isLoading ? (
-            <div className="flex items-center justify-center py-12">
-              <LoadingSpinner size="lg" variant="primary" />
-            </div>
-          ) : error ? (
-            <div className="py-12">
-              <Alert variant="error" message={error} />
-            </div>
-          ) : orders.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <p className="text-body text-foreground-secondary">
-                No orders yet
-              </p>
-              <p className="text-body-sm text-foreground-tertiary mt-2">
-                When you place an order, it will appear here
-              </p>
-              <Link href="/products" className="mt-4">
+    <Section className="py-8 md:py-12">
+      <Container>
+        <div className="mb-8">
+          <h1 className="text-h1 font-bold text-foreground mb-2">My Orders</h1>
+          <p className="text-body-md text-foreground-secondary">
+            View and track your order history
+          </p>
+        </div>
+
+        {error && (
+          <div className="mb-6">
+            <Alert variant="error" message={error} />
+          </div>
+        )}
+
+        {orders.length === 0 ? (
+          <EmptyState
+            icon={<ShoppingBagIcon className="h-16 w-16 text-neutral-400" />}
+            title="No orders yet"
+            description="You haven't placed any orders yet. Start shopping to see your orders here."
+            action={
+              <Link href="/products">
                 <Button variant="primary">Start Shopping</Button>
               </Link>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {orders.map((order) => (
-                <div
-                  key={order.id}
-                  className="p-4 border border-neutral-200 rounded-lg hover:border-primary-300 transition-colors"
-                >
+            }
+          />
+        ) : (
+          <div className="space-y-6">
+            {orders.map((order) => (
+              <Card key={order.id} variant="elevated">
+                <CardContent className="p-6">
                   <div className="space-y-4">
                     {/* Order Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-neutral-200">
                       <div>
                         <div className="flex items-center gap-3 mb-2">
-                          <Link
-                            href={`/orders/${order.id}`}
-                            className="text-body-lg font-semibold text-foreground hover:text-primary-900 transition-colors"
-                          >
+                          <h3 className="text-body-lg font-semibold text-foreground">
                             Order {order.orderNumber}
-                          </Link>
+                          </h3>
                           <Badge variant={getStatusBadgeVariant(order.status)}>
                             {getStatusLabel(order.status)}
                           </Badge>
@@ -212,12 +225,13 @@ export default function UserOrdersPage() {
                       )}
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </Container>
+    </Section>
   );
 }
+

@@ -20,16 +20,6 @@ export default function AuthLayout({
 }: AuthLayoutProps) {
   return (
     <div className="w-full">
-      {/* Brand/Logo Area */}
-      <div className="text-center mb-6 sm:mb-8">
-        <Link
-          href="/"
-          className="inline-block text-h2 sm:text-h1 font-bold text-foreground hover:text-primary-800 transition-colors"
-        >
-          MeubleTN
-        </Link>
-      </div>
-
       {/* Card Container */}
       <Card variant="elevated">
         {/* Page Title */}

@@ -1,22 +1,33 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, PasswordInput, Label } from '@/components/ui';
-import { Alert, FieldError, ButtonLoading } from '@/components/patterns';
-import { changePassword, logoutAll } from '@/lib/api/auth';
-import { useAuthStore } from '@/store/auth';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  PasswordInput,
+  Label,
+} from "@/components/ui";
+import { Alert, FieldError, ButtonLoading } from "@/components/patterns";
+import { changePassword, logoutAll } from "@/lib/api/auth";
+import { useAuthStore } from "@/store/auth";
 
-const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1, 'Current password is required'),
-  newPassword: z.string().min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string().min(1, 'Please confirm your password'),
-}).refine((data) => data.newPassword === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-});
+const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 
@@ -38,17 +49,17 @@ export default function AccountSecurityPage() {
   // Placeholder active sessions data
   const activeSessions = [
     {
-      id: '1',
-      device: 'Chrome on Linux',
-      location: 'New York, USA',
-      lastActive: 'Just now',
+      id: "1",
+      device: "Chrome on Linux",
+      location: "New York, USA",
+      lastActive: "Just now",
       isCurrent: true,
     },
     {
-      id: '2',
-      device: 'Safari on iPhone',
-      location: 'San Francisco, USA',
-      lastActive: '2 hours ago',
+      id: "2",
+      device: "Safari on iPhone",
+      location: "San Francisco, USA",
+      lastActive: "2 hours ago",
       isCurrent: false,
     },
   ];
@@ -62,19 +73,28 @@ export default function AccountSecurityPage() {
       setIsSuccess(true);
       reset();
     } catch (err: unknown) {
-      const errorMessage = (err instanceof Error ? err.message : undefined) || 'Password change failed. Please try again.';
-      
-      if (errorMessage.toLowerCase().includes('current password') || errorMessage.toLowerCase().includes('incorrect')) {
-        setFormError('currentPassword', { message: errorMessage });
+      const errorMessage =
+        (err instanceof Error ? err.message : undefined) ||
+        "Password change failed. Please try again.";
+
+      if (
+        errorMessage.toLowerCase().includes("current password") ||
+        errorMessage.toLowerCase().includes("incorrect")
+      ) {
+        setFormError("currentPassword", { message: errorMessage });
       } else {
-        setFormError('root', { message: errorMessage });
+        setFormError("root", { message: errorMessage });
         setError(errorMessage);
       }
     }
   };
 
   const handleLogoutAll = async () => {
-    if (!confirm('Are you sure you want to logout from all devices? You will need to sign in again on all devices.')) {
+    if (
+      !confirm(
+        "Are you sure you want to logout from all devices? You will need to sign in again on all devices."
+      )
+    ) {
       return;
     }
 
@@ -83,9 +103,11 @@ export default function AccountSecurityPage() {
     try {
       await logoutAll();
       // Redirect to login after logout all
-      window.location.href = '/auth/login';
+      window.location.href = "/auth/login";
     } catch (err: unknown) {
-      const errorMessage = (err instanceof Error ? err.message : undefined) || 'Failed to logout from all devices';
+      const errorMessage =
+        (err instanceof Error ? err.message : undefined) ||
+        "Failed to logout from all devices";
       setError(errorMessage);
       setIsLoggingOutAll(false);
     }
@@ -100,7 +122,10 @@ export default function AccountSecurityPage() {
 
       {/* Error Message */}
       {(errors.root || error) && (
-        <Alert variant="error" message={errors.root?.message || error || 'An error occurred'} />
+        <Alert
+          variant="error"
+          message={errors.root?.message || error || "An error occurred"}
+        />
       )}
 
       {/* Change Password Form */}
@@ -112,14 +137,19 @@ export default function AccountSecurityPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4" noValidate onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="space-y-6"
+            noValidate
+            onSubmit={handleSubmit(onSubmit)}
+          >
             {/* Security Warning */}
             <div className="p-3 rounded-md bg-warning-50 border border-warning-200">
               <p className="text-body-sm text-warning-800 font-medium">
                 Security Tip
               </p>
               <p className="text-body-xs text-warning-700 mt-1">
-                Use a strong password with at least 8 characters, including letters, numbers, and special characters.
+                Use a strong password with at least 8 characters, including
+                letters, numbers, and special characters.
               </p>
             </div>
 
@@ -133,16 +163,20 @@ export default function AccountSecurityPage() {
                 autoComplete="current-password"
                 placeholder="••••••••"
                 aria-required="true"
-                aria-invalid={errors.currentPassword ? 'true' : 'false'}
-                aria-describedby={errors.currentPassword ? 'currentPassword-error' : undefined}
+                aria-invalid={errors.currentPassword ? "true" : "false"}
+                aria-describedby={
+                  errors.currentPassword ? "currentPassword-error" : undefined
+                }
                 error={!!errors.currentPassword}
                 disabled={isSubmitting}
-                {...register('currentPassword')}
+                {...register("currentPassword")}
               />
               {errors.currentPassword && (
                 <FieldError
                   id="currentPassword-error"
-                  message={errors.currentPassword.message || 'Invalid current password'}
+                  message={
+                    errors.currentPassword.message || "Invalid current password"
+                  }
                 />
               )}
             </div>
@@ -157,16 +191,18 @@ export default function AccountSecurityPage() {
                 autoComplete="new-password"
                 placeholder="••••••••"
                 aria-required="true"
-                aria-invalid={errors.newPassword ? 'true' : 'false'}
-                aria-describedby={errors.newPassword ? 'newPassword-error' : undefined}
+                aria-invalid={errors.newPassword ? "true" : "false"}
+                aria-describedby={
+                  errors.newPassword ? "newPassword-error" : undefined
+                }
                 error={!!errors.newPassword}
                 disabled={isSubmitting}
-                {...register('newPassword')}
+                {...register("newPassword")}
               />
               {errors.newPassword && (
                 <FieldError
                   id="newPassword-error"
-                  message={errors.newPassword.message || 'Invalid password'}
+                  message={errors.newPassword.message || "Invalid password"}
                 />
               )}
             </div>
@@ -181,22 +217,34 @@ export default function AccountSecurityPage() {
                 autoComplete="new-password"
                 placeholder="••••••••"
                 aria-required="true"
-                aria-invalid={errors.confirmPassword ? 'true' : 'false'}
-                aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
+                aria-invalid={errors.confirmPassword ? "true" : "false"}
+                aria-describedby={
+                  errors.confirmPassword ? "confirmPassword-error" : undefined
+                }
                 error={!!errors.confirmPassword}
                 disabled={isSubmitting}
-                {...register('confirmPassword')}
+                {...register("confirmPassword")}
               />
               {errors.confirmPassword && (
                 <FieldError
                   id="confirmPassword-error"
-                  message={errors.confirmPassword.message || 'Passwords do not match'}
+                  message={
+                    errors.confirmPassword.message || "Passwords do not match"
+                  }
                 />
               )}
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-end pt-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t border-neutral-200">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isSubmitting}
+                onClick={() => reset()}
+              >
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 variant="primary"
@@ -204,22 +252,21 @@ export default function AccountSecurityPage() {
                 aria-busy={isSubmitting}
               >
                 {isSubmitting ? (
-                  <ButtonLoading loadingText="Updating...">Update Password</ButtonLoading>
+                  <ButtonLoading loadingText="Updating...">
+                    Update Password
+                  </ButtonLoading>
                 ) : (
-                  'Update Password'
+                  "Update Password"
                 )}
               </Button>
             </div>
           </form>
         </CardContent>
-      </Card>
-
-      {/* Active Sessions */}
-      <Card variant="elevated">
         <CardHeader>
           <CardTitle>Active Sessions</CardTitle>
           <CardDescription>
-            Devices currently signed in to your account. Revoke any session you don&apos;t recognize.
+            Devices currently signed in to your account. Revoke any session you
+            don&apos;t recognize.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -246,7 +293,11 @@ export default function AccountSecurityPage() {
                     </p>
                   </div>
                   {!session.isCurrent && (
-                    <Button variant="outline" size="sm" disabled={isLoggingOutAll}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={isLoggingOutAll}
+                    >
                       Revoke
                     </Button>
                   )}
@@ -269,7 +320,8 @@ export default function AccountSecurityPage() {
                   Warning
                 </p>
                 <p className="text-body-xs text-error-700">
-                  This will sign you out of all devices except this one. You&apos;ll need to sign in again on all other devices.
+                  This will sign you out of all devices except this one.
+                  You&apos;ll need to sign in again on all other devices.
                 </p>
               </div>
               <Button
@@ -281,7 +333,7 @@ export default function AccountSecurityPage() {
                 {isLoggingOutAll ? (
                   <ButtonLoading>Logging out...</ButtonLoading>
                 ) : (
-                  'Logout All Other Sessions'
+                  "Logout All Other Sessions"
                 )}
               </Button>
             </div>

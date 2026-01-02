@@ -13,6 +13,7 @@ import {
   Section,
 } from "@/components/ui";
 import { Alert, FieldError, ButtonLoading } from "@/components/patterns";
+import { HeroSection } from "@/components/hero";
 import { createContact } from "@/lib/api/contact";
 
 const contactSchema = z.object({
@@ -54,9 +55,11 @@ export default function ContactPage() {
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage =
-        err.message || "Failed to submit contact form. Please try again.";
+        err instanceof Error
+          ? err.message
+          : "Failed to submit contact form. Please try again.";
       setSubmitError(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -66,19 +69,11 @@ export default function ContactPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-neutral-50 py-16 md:py-24">
-        <div className="container-custom mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-display-md md:text-display-lg font-bold text-foreground mb-6">
-              Wear like a pro
-            </h1>
-            <p className="text-body-lg text-foreground-secondary mb-8 max-w-2xl mx-auto">
-              You have questions about our products or our shop, or even just a
-              message to say hi!
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        backgroundImage="/landing4.webp"
+        title="Wear like a pro"
+        description="You have questions about our products or our shop, or even just a message to say hi!"
+      />
 
       {/* Contact Us Section */}
       <Section variant="muted">
@@ -210,7 +205,7 @@ export default function ContactPage() {
                         </svg>
                       </div>
                       <p className="text-body text-foreground-secondary">
-                        We're here to help
+                        We&apos;re here to help
                       </p>
                     </div>
                   </div>

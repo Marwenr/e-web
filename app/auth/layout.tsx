@@ -33,7 +33,7 @@ export default function AuthLayoutWrapper({
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background-secondary py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-background-secondary pt-24 pb-8 px-4 sm:pt-28 sm:pb-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">{children}</div>
     </div>
   );

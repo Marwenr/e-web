@@ -159,49 +159,53 @@
   /* Container utilities */
   .container-custom {
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: theme('spacing.4');
-    padding-right: theme('spacing.4');
   }
 
   @screen sm {
     .container-custom {
-      max-width: theme('screens.sm');
-      padding-left: theme('spacing.6');
-      padding-right: theme('spacing.6');
+      padding-inline: 50px;
     }
   }
 
   @screen md {
     .container-custom {
-      max-width: theme('screens.md');
-      padding-left: theme('spacing.8');
-      padding-right: theme('spacing.8');
-    }
-  }
-
-  @screen lg {
-    .container-custom {
-      max-width: theme('screens.lg');
-      padding-left: theme('spacing.8');
-      padding-right: theme('spacing.8');
+      padding-inline: 150px
     }
   }
 
   @screen xl {
     .container-custom {
-      max-width: theme('screens.xl');
-      padding-left: theme('spacing.8');
-      padding-right: theme('spacing.8');
+      padding-inline: 200px;
     }
   }
 
   @screen 2xl {
     .container-custom {
-      max-width: theme('screens.2xl');
-      padding-left: theme('spacing.8');
-      padding-right: theme('spacing.8');
+      padding-inline: 220px;
     }
+  }
+
+  /* Custom Scrollbar Styles */
+  .scrollbar-simple::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-simple::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-simple::-webkit-scrollbar-thumb {
+    background: #9ca3af;
+    border-radius: 4px;
+  }
+
+  .scrollbar-simple::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+  }
+
+  /* Firefox scrollbar */
+  .scrollbar-simple {
+    scrollbar-width: thin;
+    scrollbar-color: #9ca3af transparent;
   }
 }

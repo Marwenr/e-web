@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { SearchIcon, ShoppingBagIcon, UserIcon } from "./svg";
 import { Badge } from "./ui";
@@ -10,11 +11,47 @@ import { useAuthStore, useCartStore } from "@/store";
 const Navbar: React.FC = () => {
   const { isAuthenticated, user } = useAuthStore();
   const { cart, initialize } = useCartStore();
+  const pathname = usePathname();
   const [isMiniCartOpen, setIsMiniCartOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const isAuthPage = pathname?.startsWith("/auth");
+  const isCartPage = pathname === "/cart";
+  const isCheckoutPage = pathname === "/checkout";
+  const isOrderConfirmationPage = pathname?.match(
+    /^\/orders\/[^/]+\/confirmation$/
+  );
+  const shouldAlwaysShowScrolled =
+    isAuthPage || isCartPage || isCheckoutPage || isOrderConfirmationPage;
 
   useEffect(() => {
     initialize();
   }, [initialize]);
+
+  useEffect(() => {
+    // Skip scroll listener on pages that should always show scrolled state
+    if (shouldAlwaysShowScrolled) {
+      return;
+    }
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const threshold = viewportHeight * 0.6; // 60vh
+
+      setIsScrolled(scrollPosition > threshold);
+    };
+
+    // Check initial scroll position
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [shouldAlwaysShowScrolled]);
+
+  // On specific pages (auth, cart, checkout, order confirmation), always treat as scrolled
+  const effectiveIsScrolled = shouldAlwaysShowScrolled || isScrolled;
 
   const cartCount = cart?.itemCount || 0;
 
@@ -24,25 +61,43 @@ const Navbar: React.FC = () => {
     isAuthenticated && user && adminRoles.includes(user.role?.toLowerCase());
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 bg-background">
-      <nav className="container-custom mx-auto flex h-16 items-center">
+    <header
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`fixed top-0 z-50 w-full transition-colors duration-300 ${
+        effectiveIsScrolled || isHovered ? "bg-background" : "bg-transparent"
+      }`}
+    >
+      <nav className="container-custom flex h-16 items-center">
         {/* Left Navigation Links */}
         <div className="flex flex-1 items-center gap-8">
           <Link
             href="/shop"
-            className="text-body-md font-medium text-foreground transition-colors hover:text-foreground-secondary"
+            className={`text-body-md font-medium transition-colors ${
+              effectiveIsScrolled || isHovered
+                ? "text-foreground hover:text-foreground-secondary"
+                : "text-primary-50 hover:text-primary-100"
+            }`}
           >
             Shop
           </Link>
           <Link
             href="/about"
-            className="text-body-md font-medium text-foreground transition-colors hover:text-foreground-secondary"
+            className={`text-body-md font-medium transition-colors ${
+              effectiveIsScrolled || isHovered
+                ? "text-foreground hover:text-foreground-secondary"
+                : "text-primary-50 hover:text-primary-100"
+            }`}
           >
             About
           </Link>
           <Link
             href="/contact"
-            className="text-body-md font-medium text-foreground transition-colors hover:text-foreground-secondary"
+            className={`text-body-md font-medium transition-colors ${
+              effectiveIsScrolled || isHovered
+                ? "text-foreground hover:text-foreground-secondary"
+                : "text-primary-50 hover:text-primary-100"
+            }`}
           >
             Contact
           </Link>
@@ -50,7 +105,14 @@ const Navbar: React.FC = () => {
 
         {/* Centered Logo */}
         <div className="flex flex-1 items-center justify-center">
-          <Link href="/" className="text-h3 font-bold text-foreground">
+          <Link
+            href="/"
+            className={`text-h3 font-bold ${
+              effectiveIsScrolled || isHovered
+                ? "text-foreground hover:text-foreground-secondary"
+                : "text-primary-50 hover:text-primary-100"
+            }`}
+          >
             MeubleTN
           </Link>
         </div>
@@ -62,7 +124,11 @@ const Navbar: React.FC = () => {
               {/* Dashboard Button - Desktop */}
               <Link
                 href="/admin"
-                className="hidden sm:inline-flex items-center gap-2 h-8 px-3 text-label font-medium bg-primary-900 text-white hover:bg-primary-800 active:bg-primary-950 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                className={`hidden sm:inline-flex items-center gap-2 h-8 px-3 text-label font-medium focus-visible:ring-offset-2 ${
+                  effectiveIsScrolled || isHovered
+                    ? "bg-primary-900 text-white hover:bg-primary-800 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                    : "text-primary-900 bg-white hover:bg-primary-100 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                }`}
               >
                 Dashboard
               </Link>
@@ -79,7 +145,11 @@ const Navbar: React.FC = () => {
           <button
             type="button"
             aria-label="Search"
-            className="text-foreground transition-colors hover:text-foreground-secondary"
+            className={`transition-colors ${
+              effectiveIsScrolled || isHovered
+                ? "text-foreground hover:text-foreground-secondary"
+                : "text-primary-50 hover:text-primary-100"
+            }`}
           >
             <SearchIcon />
           </button>
@@ -87,7 +157,11 @@ const Navbar: React.FC = () => {
             type="button"
             onClick={() => setIsMiniCartOpen(true)}
             aria-label="Shopping cart"
-            className="relative text-foreground transition-colors hover:text-foreground-secondary"
+            className={`relative transition-colors ${
+              effectiveIsScrolled
+                ? "text-foreground hover:text-foreground-secondary"
+                : "text-primary-50 hover:text-primary-100"
+            }`}
           >
             <ShoppingBagIcon />
             {cartCount > 0 && (

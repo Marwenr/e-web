@@ -176,33 +176,24 @@ export default function AddressesPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-h2 font-bold text-foreground">Addresses</h1>
-          <p className="text-body text-foreground-secondary mt-2">
-            Manage your shipping and billing addresses
-          </p>
-        </div>
-        <div className="flex items-center justify-center py-12">
-          <div className="text-center">
-            <div className="h-8 w-8 border-4 border-primary-200 border-t-primary-900 rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-body text-foreground-secondary">
-              Loading addresses...
-            </p>
-          </div>
-        </div>
+        <Card variant="elevated">
+          <CardContent>
+            <div className="flex items-center justify-center py-12">
+              <div className="text-center">
+                <div className="h-8 w-8 border-4 border-primary-200 border-t-primary-900 rounded-full animate-spin mx-auto mb-4" />
+                <p className="text-body text-foreground-secondary">
+                  Loading addresses...
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-h2 font-bold text-foreground">Addresses</h1>
-        <p className="text-body text-foreground-secondary mt-2">
-          Manage your shipping and billing addresses
-        </p>
-      </div>
-
       {/* Success Message */}
       {success && <Alert variant="success" message={success} />}
 
@@ -280,212 +271,217 @@ export default function AddressesPage() {
             </div>
           )}
         </CardContent>
+        {/* Add/Edit Form */}
+        {(showForm || addresses.length > 0) && (
+          <div>
+            <CardHeader>
+              <CardTitle>
+                {isEditing ? "Edit Address" : "Add New Address"}
+              </CardTitle>
+              <CardDescription>
+                {isEditing
+                  ? "Update address information"
+                  : "Enter a new shipping or billing address"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {errors.root && (
+                <Alert
+                  variant="error"
+                  message={errors.root.message || "An error occurred"}
+                />
+              )}
+              <form
+                className="space-y-6"
+                noValidate
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="space-y-2">
+                  <Label htmlFor="fullName" required>
+                    Full Name
+                  </Label>
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="John Doe"
+                    disabled={isSubmitting}
+                    error={!!errors.fullName}
+                    {...register("fullName")}
+                  />
+                  {errors.fullName && (
+                    <FieldError
+                      message={
+                        errors.fullName.message || "Full name is required"
+                      }
+                    />
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="addressLine1" required>
+                    Address Line 1
+                  </Label>
+                  <Input
+                    id="addressLine1"
+                    type="text"
+                    placeholder="123 Main Street"
+                    disabled={isSubmitting}
+                    error={!!errors.addressLine1}
+                    {...register("addressLine1")}
+                  />
+                  {errors.addressLine1 && (
+                    <FieldError
+                      message={
+                        errors.addressLine1.message ||
+                        "Address line 1 is required"
+                      }
+                    />
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="addressLine2">
+                    Address Line 2 (Optional)
+                  </Label>
+                  <Input
+                    id="addressLine2"
+                    type="text"
+                    placeholder="Apartment, suite, etc."
+                    disabled={isSubmitting}
+                    error={!!errors.addressLine2}
+                    {...register("addressLine2")}
+                  />
+                  {errors.addressLine2 && (
+                    <FieldError
+                      message={
+                        errors.addressLine2.message || "Invalid address line 2"
+                      }
+                    />
+                  )}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="city" required>
+                      City
+                    </Label>
+                    <Input
+                      id="city"
+                      type="text"
+                      placeholder="New York"
+                      disabled={isSubmitting}
+                      error={!!errors.city}
+                      {...register("city")}
+                    />
+                    {errors.city && (
+                      <FieldError
+                        message={errors.city.message || "City is required"}
+                      />
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="state" required>
+                      State / Province
+                    </Label>
+                    <Input
+                      id="state"
+                      type="text"
+                      placeholder="NY"
+                      disabled={isSubmitting}
+                      error={!!errors.state}
+                      {...register("state")}
+                    />
+                    {errors.state && (
+                      <FieldError
+                        message={
+                          errors.state.message || "State/Province is required"
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="postalCode" required>
+                      Postal Code
+                    </Label>
+                    <Input
+                      id="postalCode"
+                      type="text"
+                      placeholder="10001"
+                      disabled={isSubmitting}
+                      error={!!errors.postalCode}
+                      {...register("postalCode")}
+                    />
+                    {errors.postalCode && (
+                      <FieldError
+                        message={
+                          errors.postalCode.message || "Postal code is required"
+                        }
+                      />
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="country" required>
+                      Country
+                    </Label>
+                    <Input
+                      id="country"
+                      type="text"
+                      placeholder="United States"
+                      disabled={isSubmitting}
+                      error={!!errors.country}
+                      {...register("country")}
+                    />
+                    {errors.country && (
+                      <FieldError
+                        message={
+                          errors.country.message || "Country is required"
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <input
+                    id="defaultAddress"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-neutral-300 text-primary-900 focus:ring-primary-500"
+                    disabled={isSubmitting}
+                    {...register("isDefault")}
+                  />
+                  <Label htmlFor="defaultAddress" className="ml-2 text-body-sm">
+                    Set as default address
+                  </Label>
+                </div>
+                <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t border-neutral-200">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={resetForm}
+                    disabled={isSubmitting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={isSubmitting}
+                    aria-busy={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <ButtonLoading loadingText="Saving...">
+                        Save Address
+                      </ButtonLoading>
+                    ) : isEditing ? (
+                      "Update Address"
+                    ) : (
+                      "Save Address"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </div>
+        )}
       </Card>
-
-      {/* Add/Edit Form */}
-      {(showForm || addresses.length > 0) && (
-        <Card variant="elevated">
-          <CardHeader>
-            <CardTitle>
-              {isEditing ? "Edit Address" : "Add New Address"}
-            </CardTitle>
-            <CardDescription>
-              {isEditing
-                ? "Update address information"
-                : "Enter a new shipping or billing address"}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {errors.root && (
-              <Alert
-                variant="error"
-                message={errors.root.message || "An error occurred"}
-              />
-            )}
-            <form
-              className="space-y-4"
-              noValidate
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="space-y-2">
-                <Label htmlFor="fullName" required>
-                  Full Name
-                </Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  placeholder="John Doe"
-                  disabled={isSubmitting}
-                  error={!!errors.fullName}
-                  {...register("fullName")}
-                />
-                {errors.fullName && (
-                  <FieldError
-                    message={errors.fullName.message || "Full name is required"}
-                  />
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="addressLine1" required>
-                  Address Line 1
-                </Label>
-                <Input
-                  id="addressLine1"
-                  type="text"
-                  placeholder="123 Main Street"
-                  disabled={isSubmitting}
-                  error={!!errors.addressLine1}
-                  {...register("addressLine1")}
-                />
-                {errors.addressLine1 && (
-                  <FieldError
-                    message={
-                      errors.addressLine1.message ||
-                      "Address line 1 is required"
-                    }
-                  />
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="addressLine2">Address Line 2 (Optional)</Label>
-                <Input
-                  id="addressLine2"
-                  type="text"
-                  placeholder="Apartment, suite, etc."
-                  disabled={isSubmitting}
-                  error={!!errors.addressLine2}
-                  {...register("addressLine2")}
-                />
-                {errors.addressLine2 && (
-                  <FieldError
-                    message={
-                      errors.addressLine2.message || "Invalid address line 2"
-                    }
-                  />
-                )}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="city" required>
-                    City
-                  </Label>
-                  <Input
-                    id="city"
-                    type="text"
-                    placeholder="New York"
-                    disabled={isSubmitting}
-                    error={!!errors.city}
-                    {...register("city")}
-                  />
-                  {errors.city && (
-                    <FieldError
-                      message={errors.city.message || "City is required"}
-                    />
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="state" required>
-                    State / Province
-                  </Label>
-                  <Input
-                    id="state"
-                    type="text"
-                    placeholder="NY"
-                    disabled={isSubmitting}
-                    error={!!errors.state}
-                    {...register("state")}
-                  />
-                  {errors.state && (
-                    <FieldError
-                      message={
-                        errors.state.message || "State/Province is required"
-                      }
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="postalCode" required>
-                    Postal Code
-                  </Label>
-                  <Input
-                    id="postalCode"
-                    type="text"
-                    placeholder="10001"
-                    disabled={isSubmitting}
-                    error={!!errors.postalCode}
-                    {...register("postalCode")}
-                  />
-                  {errors.postalCode && (
-                    <FieldError
-                      message={
-                        errors.postalCode.message || "Postal code is required"
-                      }
-                    />
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="country" required>
-                    Country
-                  </Label>
-                  <Input
-                    id="country"
-                    type="text"
-                    placeholder="United States"
-                    disabled={isSubmitting}
-                    error={!!errors.country}
-                    {...register("country")}
-                  />
-                  {errors.country && (
-                    <FieldError
-                      message={errors.country.message || "Country is required"}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center">
-                <input
-                  id="defaultAddress"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-neutral-300 text-primary-900 focus:ring-primary-500"
-                  disabled={isSubmitting}
-                  {...register("isDefault")}
-                />
-                <Label htmlFor="defaultAddress" className="ml-2 text-body-sm">
-                  Set as default address
-                </Label>
-              </div>
-              <div className="flex justify-end gap-2 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={resetForm}
-                  disabled={isSubmitting}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  disabled={isSubmitting}
-                  aria-busy={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <ButtonLoading loadingText="Saving...">
-                      Save Address
-                    </ButtonLoading>
-                  ) : isEditing ? (
-                    "Update Address"
-                  ) : (
-                    "Save Address"
-                  )}
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

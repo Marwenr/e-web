@@ -1,11 +1,19 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { Container, Section } from '@/components/ui';
-import { UserIcon, LockIcon, ShoppingBagIcon, MapPinIcon, LogoutIcon, MenuIcon, XIcon } from '@/components/svg';
-import { LogoutModal } from '@/components/auth';
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Container, Section } from "@/components/ui";
+import {
+  UserIcon,
+  LockIcon,
+  ShoppingBagIcon,
+  MapPinIcon,
+  LogoutIcon,
+  MenuIcon,
+  XIcon,
+} from "@/components/svg";
+import { LogoutModal } from "@/components/auth";
 
 export interface AccountNavItem {
   href: string;
@@ -22,23 +30,23 @@ export interface AccountLayoutProps {
 
 const accountNavItems: AccountNavItem[] = [
   {
-    href: '/user/settings',
-    label: 'Profile Settings',
+    href: "/user/settings",
+    label: "Profile Settings",
     icon: <UserIcon className="h-5 w-5" />,
   },
   {
-    href: '/user/security',
-    label: 'Security',
+    href: "/user/security",
+    label: "Security",
     icon: <LockIcon className="h-5 w-5" />,
   },
   {
-    href: '/user/orders',
-    label: 'Orders',
+    href: "/user/orders",
+    label: "Orders",
     icon: <ShoppingBagIcon className="h-5 w-5" />,
   },
   {
-    href: '/user/addresses',
-    label: 'Addresses',
+    href: "/user/addresses",
+    label: "Addresses",
     icon: <MapPinIcon className="h-5 w-5" />,
   },
 ];
@@ -49,7 +57,6 @@ export default function AccountLayout({
   description,
 }: AccountLayoutProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
@@ -62,19 +69,30 @@ export default function AccountLayout({
   };
 
   const isActive = (href: string) => {
-    return pathname === href || pathname?.startsWith(href + '/');
+    return pathname === href || pathname?.startsWith(href + "/");
   };
 
   return (
-    <Section>
-      <Container size="lg">
+    <Section
+      className="min-h-screen relative"
+      style={{
+        backgroundImage: `url('/landing5.webp')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/60 z-0" />
+
+      <Container size="lg" className="relative z-10 py-8">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <button
               type="button"
               onClick={toggleDrawer}
-              className="flex items-center gap-2 px-4 py-2 text-body font-medium text-foreground hover:bg-neutral-100 rounded-md transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-body font-medium text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 rounded-md transition-colors border border-white/20"
               aria-label="Open account menu"
               aria-expanded={isDrawerOpen}
             >
@@ -86,7 +104,7 @@ export default function AccountLayout({
           {/* Mobile Drawer Overlay */}
           {isDrawerOpen && (
             <div
-              className="fixed inset-0 bg-neutral-900 bg-opacity-50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/70 z-40 lg:hidden backdrop-blur-sm"
               onClick={closeDrawer}
               aria-hidden="true"
             />
@@ -99,14 +117,19 @@ export default function AccountLayout({
               top-0 left-0
               h-full lg:h-auto
               w-64 lg:w-56
-              bg-background lg:bg-transparent
-              border-r border-neutral-200 lg:border-0
+              bg-white/95 backdrop-blur-md lg:bg-white/90 lg:backdrop-blur-md
+              border-r border-white/20 lg:border-0
+              lg:rounded-lg lg:shadow-xl
               z-50 lg:z-auto
               transform transition-transform duration-300 ease-in-out
-              ${isDrawerOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+              ${
+                isDrawerOpen
+                  ? "translate-x-0"
+                  : "-translate-x-full lg:translate-x-0"
+              }
             `}
           >
-            <div className="p-4 lg:p-0">
+            <div className="p-4 lg:p-4">
               {/* Mobile Drawer Header */}
               <div className="flex items-center justify-between mb-6 lg:hidden">
                 <h2 className="text-h4 font-bold text-foreground">Account</h2>
@@ -133,20 +156,27 @@ export default function AccountLayout({
                         flex items-center gap-3
                         px-4 py-3
                         text-body
+                        leading-normal
                         rounded-md
-                        transition-colors
+                        transition-all
                         ${
                           active
-                            ? 'bg-primary-50 text-primary-900 font-medium'
-                            : 'text-foreground-secondary hover:bg-neutral-100 hover:text-foreground'
+                            ? "bg-primary-600 text-white shadow-md"
+                            : "text-foreground hover:bg-neutral-100 hover:text-foreground"
                         }
                       `}
-                      aria-current={active ? 'page' : undefined}
+                      aria-current={active ? "page" : undefined}
                     >
-                      <span className={active ? 'text-primary-900' : 'text-foreground-tertiary'}>
+                      <span
+                        className={
+                          active ? "text-white" : "text-foreground-tertiary"
+                        }
+                      >
                         {item.icon}
                       </span>
-                      <span>{item.label}</span>
+                      <span className={active ? "font-medium" : ""}>
+                        {item.label}
+                      </span>
                       {item.badge && item.badge > 0 && (
                         <span className="ml-auto px-2 py-0.5 text-label font-medium bg-primary-900 text-white rounded-full">
                           {item.badge}
@@ -166,7 +196,7 @@ export default function AccountLayout({
                     setIsLogoutModalOpen(true);
                     closeDrawer();
                   }}
-                  className="flex items-center gap-3 px-4 py-3 text-body text-error-600 hover:bg-error-50 rounded-md transition-colors w-full text-left"
+                  className="flex items-center gap-3 px-4 py-3 text-body leading-normal text-error-600 hover:bg-error-50 rounded-md transition-colors w-full text-left"
                 >
                   <LogoutIcon className="h-5 w-5" />
                   <span>Logout</span>
@@ -181,12 +211,12 @@ export default function AccountLayout({
             {(title || description) && (
               <div className="mb-6">
                 {title && (
-                  <h1 className="text-h2 font-bold text-foreground mb-2">
+                  <h1 className="text-h2 font-bold text-white mb-2 drop-shadow-lg">
                     {title}
                   </h1>
                 )}
                 {description && (
-                  <p className="text-body text-foreground-secondary">
+                  <p className="text-body text-white/90 drop-shadow-md">
                     {description}
                   </p>
                 )}
@@ -210,4 +240,3 @@ export default function AccountLayout({
     </Section>
   );
 }
-

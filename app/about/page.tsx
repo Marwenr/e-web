@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Container, Section } from "@/components/ui";
+import { HeroSection } from "@/components/hero";
 
 export const metadata: Metadata = {
   title: "About Us - MeubleTN",
@@ -32,19 +33,11 @@ export default function AboutPage() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-neutral-50 py-16 md:py-24">
-        <div className="container-custom mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-display-md md:text-display-lg font-bold text-foreground mb-6">
-              A story about two lovers
-            </h1>
-            <p className="text-body-lg text-foreground-secondary mb-8 max-w-2xl mx-auto">
-              Since 1963, we&apos;ve pioneered the creation of beautiful clothing
-              and footwear for all the family.
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        backgroundImage="/landing2.webp"
+        title="A story about two lovers"
+        description="Since 1963, we've pioneered the creation of beautiful clothing and footwear for all the family."
+      />
 
       {/* Brand Name Section */}
       <Section>
@@ -99,17 +92,19 @@ export default function AboutPage() {
                 </h3>
                 <div className="space-y-4 text-body-lg text-foreground-secondary">
                   <p>
-                    We are committed to creating exceptional e-commerce experiences
-                    through thoughtful design and meticulous attention to detail.
-                    Our template is crafted to empower businesses with a platform
-                    that not only looks beautiful but also performs seamlessly.
+                    We are committed to creating exceptional e-commerce
+                    experiences through thoughtful design and meticulous
+                    attention to detail. Our template is crafted to empower
+                    businesses with a platform that not only looks beautiful but
+                    also performs seamlessly.
                   </p>
                   <p>
                     Our mission extends beyond just selling products. We aim to
-                    create lasting relationships with our customers by delivering
-                    quality items that become cherished parts of their lives. Every
-                    piece we create is designed with care, ensuring it will bring
-                    joy and serve you well for years to come.
+                    create lasting relationships with our customers by
+                    delivering quality items that become cherished parts of
+                    their lives. Every piece we create is designed with care,
+                    ensuring it will bring joy and serve you well for years to
+                    come.
                   </p>
                 </div>
               </div>
@@ -179,4 +174,3 @@ export default function AboutPage() {
     </main>
   );
 }
-

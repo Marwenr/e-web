@@ -208,7 +208,7 @@ export default function MiniCart({ isOpen, onClose }: MiniCartProps) {
                 </Link>
                 <Link href="/checkout" onClick={onClose}>
                   <Button variant="primary" size="lg" className="w-full">
-                    Checkout
+                    Proceed to Checkout
                   </Button>
                 </Link>
               </div>

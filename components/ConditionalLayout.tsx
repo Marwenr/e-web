@@ -25,7 +25,7 @@ export default function ConditionalLayout({
 
   return (
     <>
-      {!isAuthPage && !isAdminPage && <Navbar />}
+      {!isAdminPage && <Navbar />}
       <div className="min-h-screen">{children}</div>
       {!isAuthPage && !isAdminPage && <Footer />}
     </>

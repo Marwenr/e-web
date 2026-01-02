@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
-import { Container, Section } from "@/components/ui";
+import { Section } from "@/components/ui";
 import { LoadingSpinner } from "@/components/patterns";
+import { HeroSection } from "@/components/hero";
 import { getProducts, ProductQueryParams } from "@/lib/api/product";
 import { getCategories, Category } from "@/lib/api/category";
 import { ProductsListClient } from "../products/ProductsListClient";
@@ -75,53 +76,43 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
   return (
     <main>
-      <Section className="bg-neutral-50 py-8 md:py-12">
-        <Container>
-          <div className="mb-8">
-            <h1 className="text-h1 font-bold text-foreground mb-2">
-              Made for you.
-            </h1>
-            <p className="text-body-md text-foreground-secondary">
-              Since 1963, we&apos;ve pioneered the creation of beautiful
-              clothing and footwear for all the family.
-            </p>
-          </div>
-        </Container>
-      </Section>
+      <HeroSection
+        backgroundImage="/landing3.webp"
+        title="Made for you."
+        description="Since 1963, we've pioneered the creation of beautiful clothing and footwear for all the family."
+      />
 
-      <Section>
-        <Container>
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
-            {/* Sidebar with category filters */}
-            <aside className="w-full lg:w-64 flex-shrink-0">
-              <Suspense
-                fallback={
-                  <div className="flex items-center justify-center py-8">
-                    <LoadingSpinner />
-                  </div>
-                }
-              >
-                <CategoryFilter
-                  categories={categories}
-                  selectedCategoryId={params.categoryId}
-                />
-              </Suspense>
-            </aside>
+      <Section className="container-custom">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          {/* Sidebar with category filters */}
+          <aside className="w-full lg:w-64 flex-shrink-0">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-8">
+                  <LoadingSpinner />
+                </div>
+              }
+            >
+              <CategoryFilter
+                categories={categories}
+                selectedCategoryId={params.categoryId}
+              />
+            </Suspense>
+          </aside>
 
-            {/* Main products grid */}
-            <div className="flex-1">
-              <Suspense
-                fallback={
-                  <div className="flex items-center justify-center py-12">
-                    <LoadingSpinner />
-                  </div>
-                }
-              >
-                <ProductsListClient initialProducts={initialProducts} />
-              </Suspense>
-            </div>
+          {/* Main products grid */}
+          <div className="flex-1">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center py-12">
+                  <LoadingSpinner />
+                </div>
+              }
+            >
+              <ProductsListClient initialProducts={initialProducts} />
+            </Suspense>
           </div>
-        </Container>
+        </div>
       </Section>
     </main>
   );
