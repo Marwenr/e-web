@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -24,7 +24,7 @@ const resetPasswordSchema = z
 
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isLoading, setLoading } = useAuthStore();
@@ -72,17 +72,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <AuthLayout
-      title="Reset Password"
-      description="Enter your new password below"
-      footerLinks={[
-        {
-          text: "Back to Sign In",
-          href: "/auth/login",
-          label: "Navigate to login page",
-        },
-      ]}
-    >
+    <>
       {isSuccess ? (
         /* Success Message */
         <div className="space-y-4">
@@ -197,6 +187,26 @@ export default function ResetPasswordPage() {
           </Button>
         </form>
       )}
+    </>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <AuthLayout
+      title="Reset Password"
+      description="Enter your new password below"
+      footerLinks={[
+        {
+          text: "Back to Sign In",
+          href: "/auth/login",
+          label: "Navigate to login page",
+        },
+      ]}
+    >
+      <Suspense fallback={<div>Loading...</div>}>
+        <ResetPasswordForm />
+      </Suspense>
     </AuthLayout>
   );
 }

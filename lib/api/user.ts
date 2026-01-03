@@ -24,11 +24,7 @@ export async function getCurrentUser(): Promise<UserProfile> {
     return await handleApiResponse<UserProfile>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: "GET_USER_ERROR",
-      };
-      throw apiError;
+      throw new ApiError(error.message, "GET_USER_ERROR");
     }
     throw error;
   }
@@ -55,11 +51,7 @@ export async function updateProfile(
     return await handleApiResponse<UserProfile>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: "UPDATE_PROFILE_ERROR",
-      };
-      throw apiError;
+      throw new ApiError(error.message, "UPDATE_PROFILE_ERROR");
     }
     throw error;
   }

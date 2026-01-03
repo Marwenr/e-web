@@ -22,7 +22,7 @@ import { useAuthStore } from "@/store/auth";
 const getStatusBadgeVariant = (status: OrderStatus) => {
   switch (status) {
     case OrderStatus.PENDING:
-      return "outline";
+      return "neutral";
     case OrderStatus.CONFIRMED:
     case OrderStatus.PAID:
       return "primary";
@@ -30,12 +30,12 @@ const getStatusBadgeVariant = (status: OrderStatus) => {
     case OrderStatus.SHIPPED:
       return "secondary";
     case OrderStatus.DELIVERED:
-      return "primary";
+      return "success";
     case OrderStatus.CANCELLED:
     case OrderStatus.REFUNDED:
-      return "outline";
+      return "error";
     default:
-      return "outline";
+      return "neutral";
   }
 };
 

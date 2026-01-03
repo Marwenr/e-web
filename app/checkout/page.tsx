@@ -313,8 +313,8 @@ export default function CheckoutPage() {
 
   const selectedAddress = addresses.find((addr) => addr.id === selectedAddressId);
   const subtotal = cart?.subtotal || 0;
-  const tax = 0; // Placeholder
-  const shipping = 0; // Placeholder
+  const tax: number = 0; // Placeholder
+  const shipping: number = 0; // Placeholder
   const total = subtotal + tax + shipping;
 
   // Get display address (either selected address or guest address)
@@ -460,7 +460,7 @@ export default function CheckoutPage() {
                             {...register("firstName")}
                           />
                           {errors.firstName && (
-                            <FieldError message={errors.firstName.message} />
+                            <FieldError message={errors.firstName.message || "First name is required"} />
                           )}
                         </div>
                         <div className="space-y-2">
@@ -475,7 +475,7 @@ export default function CheckoutPage() {
                             {...register("lastName")}
                           />
                           {errors.lastName && (
-                            <FieldError message={errors.lastName.message} />
+                            <FieldError message={errors.lastName.message || "Last name is required"} />
                           )}
                         </div>
                       </div>
@@ -491,7 +491,7 @@ export default function CheckoutPage() {
                             {...register("email")}
                           />
                           {errors.email && (
-                            <FieldError message={errors.email.message} />
+                            <FieldError message={errors.email.message || "Invalid email address"} />
                           )}
                         </div>
                         <div className="space-y-2">
@@ -506,7 +506,7 @@ export default function CheckoutPage() {
                             {...register("phoneNumber")}
                           />
                           {errors.phoneNumber && (
-                            <FieldError message={errors.phoneNumber.message} />
+                            <FieldError message={errors.phoneNumber.message || "Phone number is required"} />
                           )}
                         </div>
                       </div>
@@ -523,7 +523,7 @@ export default function CheckoutPage() {
                           {...register("addressLine1")}
                         />
                         {errors.addressLine1 && (
-                          <FieldError message={errors.addressLine1.message} />
+                          <FieldError message={errors.addressLine1.message || "Address line 1 is required"} />
                         )}
                       </div>
 
@@ -537,7 +537,7 @@ export default function CheckoutPage() {
                           {...register("addressLine2")}
                         />
                         {errors.addressLine2 && (
-                          <FieldError message={errors.addressLine2.message} />
+                          <FieldError message={errors.addressLine2.message || "Invalid address line 2"} />
                         )}
                       </div>
 
@@ -553,7 +553,7 @@ export default function CheckoutPage() {
                             error={!!errors.city}
                             {...register("city")}
                           />
-                          {errors.city && <FieldError message={errors.city.message} />}
+                          {errors.city && <FieldError message={errors.city.message || "City is required"} />}
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="state" required>
@@ -566,7 +566,7 @@ export default function CheckoutPage() {
                             error={!!errors.state}
                             {...register("state")}
                           />
-                          {errors.state && <FieldError message={errors.state.message} />}
+                          {errors.state && <FieldError message={errors.state.message || "State/Province is required"} />}
                         </div>
                       </div>
 
@@ -583,7 +583,7 @@ export default function CheckoutPage() {
                             {...register("postalCode")}
                           />
                           {errors.postalCode && (
-                            <FieldError message={errors.postalCode.message} />
+                            <FieldError message={errors.postalCode.message || "Postal code is required"} />
                           )}
                         </div>
                         <div className="space-y-2">
@@ -598,7 +598,7 @@ export default function CheckoutPage() {
                             {...register("country")}
                           />
                           {errors.country && (
-                            <FieldError message={errors.country.message} />
+                            <FieldError message={errors.country.message || "Country is required"} />
                           )}
                         </div>
                       </div>
@@ -783,7 +783,6 @@ export default function CheckoutPage() {
                     <div className="space-y-3 max-h-64 overflow-y-auto">
                       {cart?.items.map((item, index) => {
                         const image =
-                          item.variant?.images?.[0] ||
                           item.product?.images?.find((img: any) => img.isPrimary) ||
                           item.product?.images?.[0];
                         const productName = item.variant?.name

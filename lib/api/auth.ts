@@ -93,11 +93,7 @@ export async function register(data: RegisterData): Promise<AuthResponse> {
     return result;
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: "REGISTRATION_ERROR",
-      };
-      throw apiError;
+      throw new ApiError(error.message, "REGISTRATION_ERROR");
     }
     throw error;
   }
@@ -127,11 +123,7 @@ export async function login(
     return result;
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: "LOGIN_ERROR",
-      };
-      throw apiError;
+      throw new ApiError(error.message, "LOGIN_ERROR");
     }
     throw error;
   }

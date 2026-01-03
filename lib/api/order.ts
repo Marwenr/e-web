@@ -132,11 +132,7 @@ export async function createOrder(
     return await handleApiResponse<Order>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'CREATE_ORDER_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'CREATE_ORDER_ERROR');
     }
     throw error;
   }
@@ -154,11 +150,7 @@ export async function getOrderById(id: string): Promise<Order> {
     return await handleApiResponse<Order>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'GET_ORDER_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'GET_ORDER_ERROR');
     }
     throw error;
   }
@@ -179,11 +171,7 @@ export async function getOrderByNumber(orderNumber: string): Promise<Order> {
     return await handleApiResponse<Order>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'GET_ORDER_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'GET_ORDER_ERROR');
     }
     throw error;
   }
@@ -201,11 +189,7 @@ export async function getUserOrders(): Promise<Order[]> {
     return await handleApiResponse<Order[]>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'GET_ORDERS_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'GET_ORDERS_ERROR');
     }
     throw error;
   }
@@ -234,11 +218,7 @@ export async function getAllOrders(filters?: OrderFilters): Promise<OrdersListRe
     return await handleApiResponse<OrdersListResponse>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'GET_ORDERS_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'GET_ORDERS_ERROR');
     }
     throw error;
   }
@@ -260,11 +240,7 @@ export async function updateOrderStatus(
     return await handleApiResponse<Order>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'UPDATE_ORDER_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'UPDATE_ORDER_ERROR');
     }
     throw error;
   }
@@ -283,11 +259,7 @@ export async function refundOrder(id: string, data: RefundOrderData): Promise<Or
     return await handleApiResponse<Order>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'REFUND_ORDER_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'REFUND_ORDER_ERROR');
     }
     throw error;
   }

@@ -86,8 +86,8 @@ export default function CartPage() {
 
   // Calculate totals (placeholder for tax and shipping)
   const subtotal = cart.subtotal;
-  const tax = 0; // Placeholder
-  const shipping = 0; // Placeholder
+  const tax: number = 0; // Placeholder
+  const shipping: number = 0; // Placeholder
   const total = subtotal + tax + shipping;
 
   return (

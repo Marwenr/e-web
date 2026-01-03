@@ -49,11 +49,7 @@ export async function getAddresses(): Promise<Address[]> {
     return await handleApiResponse<Address[]>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'GET_ADDRESSES_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'GET_ADDRESSES_ERROR');
     }
     throw error;
   }
@@ -71,11 +67,7 @@ export async function getAddressById(id: string): Promise<Address> {
     return await handleApiResponse<Address>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'GET_ADDRESS_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'GET_ADDRESS_ERROR');
     }
     throw error;
   }
@@ -94,11 +86,7 @@ export async function createAddress(data: CreateAddressData): Promise<Address> {
     return await handleApiResponse<Address>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'CREATE_ADDRESS_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'CREATE_ADDRESS_ERROR');
     }
     throw error;
   }
@@ -117,11 +105,7 @@ export async function updateAddress(id: string, data: UpdateAddressData): Promis
     return await handleApiResponse<Address>(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'UPDATE_ADDRESS_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'UPDATE_ADDRESS_ERROR');
     }
     throw error;
   }
@@ -139,11 +123,7 @@ export async function deleteAddress(id: string): Promise<void> {
     await handleApiResponse(response);
   } catch (error) {
     if (error instanceof Error) {
-      const apiError: ApiError = {
-        message: error.message,
-        code: 'DELETE_ADDRESS_ERROR',
-      };
-      throw apiError;
+      throw new ApiError(error.message, 'DELETE_ADDRESS_ERROR');
     }
     throw error;
   }

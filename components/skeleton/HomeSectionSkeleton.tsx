@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Section } from "@/components/ui";
 import { Skeleton } from "./Skeleton";
 import { ProductGridSkeleton } from "./ProductGridSkeleton";
+import { ProductSectionSkeleton } from "./ProductSectionSkeleton";
 
 export interface HomeSectionSkeletonProps {
   showHero?: boolean;

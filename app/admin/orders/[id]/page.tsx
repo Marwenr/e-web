@@ -271,7 +271,9 @@ export default function AdminOrderDetailPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-1 text-body-sm text-foreground">
-                  <p className="font-semibold">{order.shippingAddress.fullName}</p>
+                  <p className="font-semibold">
+                    {order.shippingAddress.fullName}
+                  </p>
                   <p>{order.shippingAddress.addressLine1}</p>
                   {order.shippingAddress.addressLine2 && (
                     <p>{order.shippingAddress.addressLine2}</p>
@@ -282,7 +284,9 @@ export default function AdminOrderDetailPage() {
                   </p>
                   <p>{order.shippingAddress.country}</p>
                   {order.shippingAddress.phoneNumber && (
-                    <p className="mt-2">Phone: {order.shippingAddress.phoneNumber}</p>
+                    <p className="mt-2">
+                      Phone: {order.shippingAddress.phoneNumber}
+                    </p>
                   )}
                   {order.shippingAddress.email && (
                     <p>Email: {order.shippingAddress.email}</p>
@@ -298,7 +302,9 @@ export default function AdminOrderDetailPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-1 text-body-sm text-foreground">
-                    <p className="font-semibold">{order.billingAddress.fullName}</p>
+                    <p className="font-semibold">
+                      {order.billingAddress.fullName}
+                    </p>
                     <p>{order.billingAddress.addressLine1}</p>
                     {order.billingAddress.addressLine2 && (
                       <p>{order.billingAddress.addressLine2}</p>
@@ -324,26 +330,36 @@ export default function AdminOrderDetailPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-body-md text-foreground-secondary">Subtotal</span>
+                <span className="text-body-md text-foreground-secondary">
+                  Subtotal
+                </span>
                 <span className="text-body-md font-medium text-foreground">
                   ${order.subtotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-body-md text-foreground-secondary">Tax</span>
+                <span className="text-body-md text-foreground-secondary">
+                  Tax
+                </span>
                 <span className="text-body-md font-medium text-foreground">
                   ${order.tax.toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-body-md text-foreground-secondary">Shipping</span>
+                <span className="text-body-md text-foreground-secondary">
+                  Shipping
+                </span>
                 <span className="text-body-md font-medium text-foreground">
-                  {order.shipping === 0 ? "Free" : `$${order.shipping.toFixed(2)}`}
+                  {order.shipping === 0
+                    ? "Free"
+                    : `$${order.shipping.toFixed(2)}`}
                 </span>
               </div>
               {order.discount > 0 && (
                 <div className="flex items-center justify-between">
-                  <span className="text-body-md text-foreground-secondary">Discount</span>
+                  <span className="text-body-md text-foreground-secondary">
+                    Discount
+                  </span>
                   <span className="text-body-md font-medium text-error-500">
                     -${order.discount.toFixed(2)}
                   </span>
@@ -351,7 +367,9 @@ export default function AdminOrderDetailPage() {
               )}
               <div className="pt-4 border-t border-neutral-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-h4 font-bold text-foreground">Total</span>
+                  <span className="text-h4 font-bold text-foreground">
+                    Total
+                  </span>
                   <span className="text-h4 font-bold text-foreground">
                     ${order.total.toFixed(2)}
                   </span>
@@ -367,7 +385,9 @@ export default function AdminOrderDetailPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
-                <p className="text-body-sm text-foreground-secondary">Order Date</p>
+                <p className="text-body-sm text-foreground-secondary">
+                  Order Date
+                </p>
                 <p className="text-body-md text-foreground">
                   {new Date(order.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
@@ -379,7 +399,9 @@ export default function AdminOrderDetailPage() {
                 </p>
               </div>
               <div>
-                <p className="text-body-sm text-foreground-secondary">Payment Method</p>
+                <p className="text-body-sm text-foreground-secondary">
+                  Payment Method
+                </p>
                 <p className="text-body-md text-foreground capitalize">
                   {order.paymentMethod === PaymentMethod.CASH
                     ? "Cash on Delivery"
@@ -388,7 +410,9 @@ export default function AdminOrderDetailPage() {
               </div>
               {order.trackingNumber && (
                 <div>
-                  <p className="text-body-sm text-foreground-secondary">Tracking Number</p>
+                  <p className="text-body-sm text-foreground-secondary">
+                    Tracking Number
+                  </p>
                   <p className="text-body-md font-medium text-foreground">
                     {order.trackingNumber}
                   </p>
@@ -396,7 +420,9 @@ export default function AdminOrderDetailPage() {
               )}
               {order.shippedAt && (
                 <div>
-                  <p className="text-body-sm text-foreground-secondary">Shipped At</p>
+                  <p className="text-body-sm text-foreground-secondary">
+                    Shipped At
+                  </p>
                   <p className="text-body-md text-foreground">
                     {new Date(order.shippedAt).toLocaleDateString()}
                   </p>
@@ -404,7 +430,9 @@ export default function AdminOrderDetailPage() {
               )}
               {order.deliveredAt && (
                 <div>
-                  <p className="text-body-sm text-foreground-secondary">Delivered At</p>
+                  <p className="text-body-sm text-foreground-secondary">
+                    Delivered At
+                  </p>
                   <p className="text-body-md text-foreground">
                     {new Date(order.deliveredAt).toLocaleDateString()}
                   </p>
@@ -496,4 +524,3 @@ export default function AdminOrderDetailPage() {
     </div>
   );
 }
-
