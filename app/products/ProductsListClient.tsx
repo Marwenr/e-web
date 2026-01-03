@@ -8,6 +8,9 @@ import {
   PaginatedProductsResponse,
   ProductQueryParams,
   getProducts,
+  getBestSellers,
+  getNewArrivals,
+  getFeaturedProducts,
 } from "@/lib/api/product";
 import { ApiError } from "@/lib/api/config";
 import { ProductError } from "@/components/product";
@@ -15,15 +18,26 @@ import { apiCache } from "@/lib/api/cache";
 
 interface ProductsListClientProps {
   initialProducts: PaginatedProductsResponse;
-  fetchFunction?: (
-    params: ProductQueryParams
-  ) => Promise<PaginatedProductsResponse>;
+  productType?: "all" | "best-sellers" | "new-arrivals" | "featured";
 }
 
 export function ProductsListClient({
   initialProducts,
-  fetchFunction = getProducts,
+  productType = "all",
 }: ProductsListClientProps) {
+  // Select the appropriate fetch function based on productType
+  const getFetchFunction = () => {
+    switch (productType) {
+      case "best-sellers":
+        return getBestSellers;
+      case "new-arrivals":
+        return getNewArrivals;
+      case "featured":
+        return getFeaturedProducts;
+      default:
+        return getProducts;
+    }
+  };
   const searchParams = useSearchParams();
   const [products, setProducts] = useState(initialProducts);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +115,8 @@ export function ProductsListClient({
 
       // Optionally refresh in background (stale-while-revalidate pattern)
       // This ensures data is fresh but UI is instant
-      fetchFunction(params)
+      const fetchFn = getFetchFunction();
+      fetchFn(params)
         .then((newProducts) => {
           // Only update if data actually changed
           if (JSON.stringify(newProducts) !== JSON.stringify(cachedProducts)) {
@@ -123,7 +138,8 @@ export function ProductsListClient({
     setError(null);
 
     // Fetch in background without blocking UI
-    fetchFunction(params)
+    const fetchFn = getFetchFunction();
+    fetchFn(params)
       .then((newProducts) => {
         setProducts(newProducts);
         setCurrentPage(newProducts.meta.page);
@@ -150,7 +166,7 @@ export function ProductsListClient({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [searchParams, fetchFunction, initialProducts.meta.limit]);
+  }, [searchParams, productType, initialProducts.meta.limit]);
 
   // Also update when initialProducts change (server-side updates)
   useEffect(() => {
@@ -202,7 +218,8 @@ export function ProductsListClient({
         params.status = status;
       }
 
-      const newProducts = await fetchFunction(params);
+      const fetchFn = getFetchFunction();
+      const newProducts = await fetchFn(params);
 
       setProducts({
         ...newProducts,
@@ -227,7 +244,7 @@ export function ProductsListClient({
     products.meta.limit,
     products.data,
     searchParams,
-    fetchFunction,
+    productType,
   ]);
 
   const hasMore = currentPage < products.meta.totalPages;

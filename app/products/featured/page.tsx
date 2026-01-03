@@ -107,7 +107,7 @@ export default async function FeaturedProductsPage({
           <Suspense fallback={<ProductGridSkeleton count={12} />}>
             <ProductsListClient 
               initialProducts={initialProducts} 
-              fetchFunction={getFeaturedProducts}
+              productType="featured"
             />
           </Suspense>
         </Container>

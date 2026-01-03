@@ -107,7 +107,7 @@ export default async function NewArrivalsPage({
           <Suspense fallback={<ProductGridSkeleton count={12} />}>
             <ProductsListClient 
               initialProducts={initialProducts} 
-              fetchFunction={getNewArrivals}
+              productType="new-arrivals"
             />
           </Suspense>
         </Container>
