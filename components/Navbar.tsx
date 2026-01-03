@@ -158,7 +158,7 @@ const Navbar: React.FC = () => {
             onClick={() => setIsMiniCartOpen(true)}
             aria-label="Shopping cart"
             className={`relative transition-colors ${
-              effectiveIsScrolled
+              effectiveIsScrolled || isHovered
                 ? "text-foreground hover:text-foreground-secondary"
                 : "text-primary-50 hover:text-primary-100"
             }`}
@@ -183,7 +183,11 @@ const Navbar: React.FC = () => {
               {/* Login Button - Desktop */}
               <Link
                 href="/auth/login"
-                className="hidden sm:inline-flex items-center gap-2 h-8 px-3 text-label font-medium border-2 border-primary-900 text-primary-900 hover:bg-primary-50 active:bg-primary-100 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+                className={`hidden sm:inline-flex items-center gap-2 h-8 px-3 text-label font-medium border-2 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 ${
+                  effectiveIsScrolled || isHovered
+                    ? "border-primary-900 text-primary-900 hover:bg-primary-50 active:bg-primary-100"
+                    : "border-primary-100 text-primary-100 hover:bg-primary-50 active:bg-primary-100"
+                }`}
               >
                 <UserIcon className="h-4 w-4" />
                 <span>Sign In</span>
