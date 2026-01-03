@@ -29,7 +29,7 @@ import { ShoppingBagIcon } from "@/components/svg";
 const getStatusBadgeVariant = (status: OrderStatus) => {
   switch (status) {
     case OrderStatus.PENDING:
-      return "outline";
+      return "neutral";
     case OrderStatus.CONFIRMED:
     case OrderStatus.PAID:
       return "primary";
@@ -40,9 +40,9 @@ const getStatusBadgeVariant = (status: OrderStatus) => {
       return "primary";
     case OrderStatus.CANCELLED:
     case OrderStatus.REFUNDED:
-      return "outline";
+      return "neutral";
     default:
-      return "outline";
+      return "neutral";
   }
 };
 
@@ -191,7 +191,7 @@ export default function AdminOrderDetailPage() {
           </Badge>
           <Badge
             variant={
-              order.paymentStatus === PaymentStatus.PAID ? "primary" : "outline"
+              order.paymentStatus === PaymentStatus.PAID ? "primary" : "neutral"
             }
           >
             {order.paymentStatus}
